@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data;
+using System.Data.SqlClient;
 
 namespace Tienda.Models
 {
@@ -44,7 +45,7 @@ namespace Tienda.Models
             Conectar();
             List < Articulo > articulos= new List < Articulo >();       
             string sql = "select codigo,descripcion,precio from articulos";
-            SqlCommand comando = new SqlCommand(sql);
+            SqlCommand comando = new SqlCommand(sql,con);
             con.Open();
             SqlDataReader registros =  comando.ExecuteReader();
             while(registros.Read()) {
@@ -57,6 +58,23 @@ namespace Tienda.Models
                 articulos.Add(art); 
             }
             return articulos;
+        }
+
+        public int Borrar(int codigo) {
+
+            Conectar();
+
+            string sql = "delete from articulos where codigo=@codigo";
+
+            SqlCommand sentencia = new SqlCommand(sql,con);
+
+            sentencia.Parameters.Add("@codigo", SqlDbType.Int);
+            sentencia.Parameters["@codigo"].Value = codigo;
+
+            con.Open() ;
+            int i = sentencia.ExecuteNonQuery();
+            con.Close();
+            return i;
         }
     
     }

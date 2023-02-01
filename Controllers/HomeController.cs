@@ -10,12 +10,23 @@ namespace Tienda.Controllers
 
         public HomeController(ILogger<HomeController> logger)
         {
+
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+
+            MantenimientoArticulos ma = new MantenimientoArticulos();
+       
+            return View(ma.GetAll());
+        }
+
+        public IActionResult Delete(int cod) {
+            MantenimientoArticulos ma = new MantenimientoArticulos();
+            ma.Borrar(cod);
+
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()
